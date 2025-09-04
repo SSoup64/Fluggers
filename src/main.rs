@@ -1,20 +1,20 @@
+pub mod ast;
 pub mod lexer;
 pub mod parser;
-pub mod ast;
 
-use crate::lexer::Lexer;
 use crate::lexer::LexError;
+use crate::lexer::Lexer;
 
 use crate::parser::Parser;
 
-use std::fs;
 use std::error::Error;
+use std::fs;
 
 fn print_error(err: &LexError, code: &String) {
     match err {
         LexError::UnknownCharacter(index) => {
             println!(
-                "Unknown character `{}` at index {}.", 
+                "Unknown character `{}` at index {}.",
                 code.chars().nth(*index).unwrap(),
                 index
             );
@@ -27,13 +27,13 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut lexer = Lexer::new(&code);
     let lexer_result = lexer.lex();
-    
+
     match lexer_result {
         Ok(tokens) => {
             for token in tokens {
                 println!("{:?}", token);
             }
-        },
+        }
         Err(errs) => {
             for err in errs {
                 print_error(&err, &code);
@@ -43,8 +43,3 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-
-
-
-
-

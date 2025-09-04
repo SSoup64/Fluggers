@@ -5,7 +5,7 @@ const KEYWORDS: phf::Map<&'static str, Token> = phf_map! {
 
     "let" => Token::KeywordLet,
     "const" => Token::KeywordConst,
-    
+
     "if" => Token::KeywordIf,
     "elif" => Token::KeywordElif,
     "else" => Token::KeywordElse,
@@ -30,7 +30,7 @@ pub enum Token<'input> {
     IntLiteral(i128),
     FloatLiteral(f64),
     StringLiteral(String),
-    
+
     // Keywords
     KeywordFunc,
 
@@ -45,7 +45,7 @@ pub enum Token<'input> {
 
     KeywordTrue,
     KeywordFalse,
-    
+
     // Symbols
     Greater,
     Lesser,
@@ -58,7 +58,7 @@ pub enum Token<'input> {
     SymbolArrow,
 
     AssignEq,
-    
+
     Plus,
     Minus,
 
@@ -81,7 +81,7 @@ pub struct Lexer<'lexer> {
     input: &'lexer String,
     index: usize,
     tokens: Vec<Token<'lexer>>,
-    errs: Vec<LexError>
+    errs: Vec<LexError>,
 }
 
 impl<'lexer> Lexer<'lexer> {
@@ -91,7 +91,7 @@ impl<'lexer> Lexer<'lexer> {
             index: 0,
             tokens: Vec::<Token>::new(),
             errs: Vec::<LexError>::new(),
-       }
+        }
     }
 
     fn get_cur_char(&mut self) -> Option<char> {
@@ -103,7 +103,7 @@ impl<'lexer> Lexer<'lexer> {
         self.index = 0;
         self.tokens.clear();
         self.errs.clear();
-        
+
         'lexer_loop: while let Some(ch) = self.get_cur_char() {
             if ch.is_whitespace() {
                 self.index += 1;
@@ -111,8 +111,12 @@ impl<'lexer> Lexer<'lexer> {
             }
 
             match ch {
-                'a'..='z' | 'A'..='Z' | '_' => { self.lex_identifier(); },
-                '0'..='9' => { self.lex_number(); },
+                'a'..='z' | 'A'..='Z' | '_' => {
+                    self.lex_identifier();
+                }
+                '0'..='9' => {
+                    self.lex_number();
+                }
 
                 '+' | '-' | '*' | '/' => {
                     if let Some(operator) = OPERATORS.get(&ch) {
@@ -121,20 +125,30 @@ impl<'lexer> Lexer<'lexer> {
                     } else {
                         unreachable!();
                     }
-                },
+                }
 
-                '(' => { self.tokens.push(Token::ParenOpen); },
-                ')' => { self.tokens.push(Token::ParenClose); },
+                '(' => {
+                    self.tokens.push(Token::ParenOpen);
+                }
+                ')' => {
+                    self.tokens.push(Token::ParenClose);
+                }
 
-                '{' => { self.tokens.push(Token::ParenCurlyOpen); },
-                '}' => { self.tokens.push(Token::ParenCurlyClose); },
+                '{' => {
+                    self.tokens.push(Token::ParenCurlyOpen);
+                }
+                '}' => {
+                    self.tokens.push(Token::ParenCurlyClose);
+                }
 
-                _ => { self.errs.push(LexError::UnknownCharacter(self.index)); },
+                _ => {
+                    self.errs.push(LexError::UnknownCharacter(self.index));
+                }
             }
-            
+
             self.index += 1;
         }
-        
+
         if self.errs.is_empty() {
             Ok(&self.tokens)
         } else {
@@ -149,7 +163,7 @@ impl<'lexer> Lexer<'lexer> {
             match ch {
                 'a'..='z' | 'A'..='Z' | '0'..='9' | '_' => {
                     self.index += 1;
-                },
+                }
                 _ => {
                     break;
                 }
@@ -157,7 +171,7 @@ impl<'lexer> Lexer<'lexer> {
         }
 
         let identifier = &self.input[start..self.index];
-        
+
         if let Some(keyword) = KEYWORDS.get(identifier) {
             self.tokens.push(keyword.clone());
         } else {
@@ -173,7 +187,7 @@ impl<'lexer> Lexer<'lexer> {
             match ch {
                 '0'..'9' | '_' => {
                     self.index += 1;
-                },
+                }
                 '.' => {
                     if found_dot {
                         // Report an error
@@ -182,7 +196,7 @@ impl<'lexer> Lexer<'lexer> {
                         self.index += 1;
                         found_dot = true;
                     }
-                },
+                }
                 _ => {
                     break;
                 }
@@ -193,24 +207,22 @@ impl<'lexer> Lexer<'lexer> {
 
         if found_dot {
             match number_str.parse::<f64>() {
-                Ok(number) => { self.tokens.push(Token::FloatLiteral(number)); },
-                Err(_) => { unreachable!(); }
+                Ok(number) => {
+                    self.tokens.push(Token::FloatLiteral(number));
+                }
+                Err(_) => {
+                    unreachable!();
+                }
             }
         } else {
             match number_str.parse::<i128>() {
-                Ok(number) => { self.tokens.push(Token::IntLiteral(number)); },
-                Err(_) => { unreachable!(); }
+                Ok(number) => {
+                    self.tokens.push(Token::IntLiteral(number));
+                }
+                Err(_) => {
+                    unreachable!();
+                }
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
