@@ -10,7 +10,7 @@ use crate::parser::Parser;
 use std::error::Error;
 use std::fs;
 
-fn print_error(err: &LexError, code: &String) {
+fn print_error(err: &LexError, code: &str) {
     match err {
         LexError::UnknownCharacter(index) => {
             println!(
@@ -36,7 +36,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         Err(errs) => {
             for err in errs {
-                print_error(&err, &code);
+                print_error(&err, &code.to_string());
             }
         }
     }

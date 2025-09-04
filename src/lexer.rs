@@ -185,7 +185,7 @@ impl<'lexer> Lexer<'lexer> {
 
         while let Some(ch) = self.get_cur_char() {
             match ch {
-                '0'..'9' | '_' => {
+                '0'..='9' | '_' => {
                     self.index += 1;
                 }
                 '.' => {
