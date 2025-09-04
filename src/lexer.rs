@@ -1,3 +1,5 @@
+use std::pin::Pin;
+
 use phf::phf_map;
 
 const KEYWORDS: phf::Map<&'static str, Token> = phf_map! {
@@ -70,6 +72,8 @@ pub enum Token<'input> {
 
     ParenCurlyOpen,
     ParenCurlyClose,
+
+    Seminolon,
 }
 
 #[derive(Debug)]
@@ -94,8 +98,12 @@ impl<'lexer> Lexer<'lexer> {
         }
     }
 
-    fn get_cur_char(&mut self) -> Option<char> {
+    fn get_cur_char(&self) -> Option<char> {
         self.input.chars().nth(self.index)
+    }
+
+    fn get_next_char(&self) -> Option<char> {
+        self.input.chars().nth(self.index + 1)
     }
 
     pub fn lex(&'lexer mut self) -> Result<&'lexer Vec<Token<'lexer>>, &'lexer Vec<LexError>> {
@@ -127,6 +135,31 @@ impl<'lexer> Lexer<'lexer> {
                     }
                 }
 
+                '<' => {
+                    if let Some('=') = self.get_next_char() {
+                        self.tokens.push(Token::LesserEq);
+                    } else {
+                        self.tokens.push(Token::Lesser);
+                    }
+                }
+
+                '>' => {
+                    if let Some('=') = self.get_next_char() {
+                        self.tokens.push(Token::GreaterEq);
+                    } else {
+                        self.tokens.push(Token::Greater);
+                    }
+                }
+
+                '=' => {
+                    if let Some('=') = self.get_next_char() {
+                        self.tokens.push(Token::IsEq);
+                        self.index += 1; // For the second =
+                    } else {
+                        self.tokens.push(Token::AssignEq);
+                    }
+                }
+
                 '(' => {
                     self.tokens.push(Token::ParenOpen);
                 }
@@ -139,6 +172,10 @@ impl<'lexer> Lexer<'lexer> {
                 }
                 '}' => {
                     self.tokens.push(Token::ParenCurlyClose);
+                }
+
+                ';' => {
+                    self.tokens.push(Token::Seminolon);
                 }
 
                 _ => {

@@ -36,7 +36,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         Err(errs) => {
             for err in errs {
-                print_error(&err, &code.to_string());
+                print_error(err, &code.to_string());
             }
         }
     }
