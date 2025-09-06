@@ -1,4 +1,4 @@
-use std::pin::Pin;
+use std::fmt;
 
 use phf::phf_map;
 
@@ -77,15 +77,41 @@ pub enum Token<'input> {
 }
 
 #[derive(Debug)]
-pub enum LexError {
+pub enum LexErrorType {
     UnknownCharacter(usize),
+}
+
+pub struct LexError<'input> {
+    input: &'input String,
+    error: LexErrorType,
+}
+
+impl<'input> LexError<'input> {
+    fn new(input: &'input String, error: LexErrorType) -> Self {
+        Self { input, error }
+    }
+}
+
+impl fmt::Display for LexError<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self.error {
+            LexErrorType::UnknownCharacter(pos) => {
+                write!(
+                    f,
+                    "Unknown character `{}` at position {}",
+                    self.input.chars().nth(pos).unwrap(),
+                    pos
+                )
+            }
+        }
+    }
 }
 
 pub struct Lexer<'lexer> {
     input: &'lexer String,
     index: usize,
     tokens: Vec<Token<'lexer>>,
-    errs: Vec<LexError>,
+    errs: Vec<LexError<'lexer>>,
 }
 
 impl<'lexer> Lexer<'lexer> {
@@ -106,7 +132,9 @@ impl<'lexer> Lexer<'lexer> {
         self.input.chars().nth(self.index + 1)
     }
 
-    pub fn lex(&'lexer mut self) -> Result<&'lexer Vec<Token<'lexer>>, &'lexer Vec<LexError>> {
+    pub fn lex(
+        &'lexer mut self,
+    ) -> Result<&'lexer Vec<Token<'lexer>>, &'lexer Vec<LexError<'lexer>>> {
         // TODO: Implement states for lexer so we don't have to reset the stuff
         self.index = 0;
         self.tokens.clear();
@@ -179,7 +207,10 @@ impl<'lexer> Lexer<'lexer> {
                 }
 
                 _ => {
-                    self.errs.push(LexError::UnknownCharacter(self.index));
+                    self.errs.push(LexError::new(
+                        self.input,
+                        LexErrorType::UnknownCharacter(self.index),
+                    ));
                 }
             }
 

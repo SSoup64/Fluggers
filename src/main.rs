@@ -10,18 +10,6 @@ use crate::parser::Parser;
 use std::error::Error;
 use std::fs;
 
-fn print_error(err: &LexError, code: &str) {
-    match err {
-        LexError::UnknownCharacter(index) => {
-            println!(
-                "Unknown character `{}` at index {}.",
-                code.chars().nth(*index).unwrap(),
-                index
-            );
-        }
-    }
-}
-
 fn main() -> Result<(), Box<dyn Error>> {
     let code: String = fs::read_to_string("../code.flug")?;
 
@@ -36,7 +24,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         Err(errs) => {
             for err in errs {
-                print_error(err, &code.to_string());
+                println!("{}", err);
             }
         }
     }
