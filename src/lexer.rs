@@ -107,15 +107,15 @@ impl fmt::Display for LexError<'_> {
     }
 }
 
-pub struct Lexer<'lexer> {
-    input: &'lexer String,
+pub struct Lexer<'input> {
+    input: &'input String,
     index: usize,
-    tokens: Vec<Token<'lexer>>,
-    errs: Vec<LexError<'lexer>>,
+    tokens: Vec<Token<'input>>,
+    errs: Vec<LexError<'input>>,
 }
 
-impl<'lexer> Lexer<'lexer> {
-    pub fn new(input: &'lexer String) -> Self {
+impl<'input> Lexer<'input> {
+    pub fn new(input: &'input String) -> Self {
         Self {
             input,
             index: 0,
@@ -133,17 +133,17 @@ impl<'lexer> Lexer<'lexer> {
     }
 
     pub fn lex(
-        &'lexer mut self,
-    ) -> Result<&'lexer Vec<Token<'lexer>>, &'lexer Vec<LexError<'lexer>>> {
+        &'input mut self,
+    ) -> Result<&'input Vec<Token<'input>>, &'input Vec<LexError<'input>>> {
         // TODO: Implement states for lexer so we don't have to reset the stuff
         self.index = 0;
         self.tokens.clear();
         self.errs.clear();
 
-        'lexer_loop: while let Some(ch) = self.get_cur_char() {
+        'input_loop: while let Some(ch) = self.get_cur_char() {
             if ch.is_whitespace() {
                 self.index += 1;
-                continue 'lexer_loop;
+                continue 'input_loop;
             }
 
             match ch {
