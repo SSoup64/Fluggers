@@ -3,7 +3,6 @@ pub mod lexer;
 pub mod parser;
 pub mod token;
 
-use crate::lexer::LexError;
 use crate::lexer::Lexer;
 
 use crate::parser::Parser;
@@ -14,8 +13,8 @@ use std::fs;
 fn main() -> Result<(), Box<dyn Error>> {
     let code: String = fs::read_to_string("../code.flug")?;
 
-    let mut lexer = Lexer::new(&code);
-    let lexer_result = lexer.lex();
+    let lexer = Lexer::new(&code);
+    let lexer_result = lexer.into_tokens();
 
     match lexer_result {
         Ok(tokens) => {

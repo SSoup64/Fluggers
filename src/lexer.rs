@@ -84,9 +84,9 @@ impl<'input> Lexer<'input> {
         self.input.chars().nth(self.index + 1)
     }
 
-    pub fn lex(
-        &'input mut self,
-    ) -> Result<&'input Vec<Token<'input>>, &'input Vec<LexError<'input>>> {
+    pub fn into_tokens(
+        mut self,
+    ) -> Result<Vec<Token<'input>>, Vec<LexError<'input>>> {
         // TODO: Implement states for lexer so we don't have to reset the stuff
         self.index = 0;
         self.tokens.clear();
@@ -170,9 +170,9 @@ impl<'input> Lexer<'input> {
         }
 
         if self.errs.is_empty() {
-            Ok(&self.tokens)
+            Ok(self.tokens)
         } else {
-            Err(&self.errs)
+            Err(self.errs)
         }
     }
 
