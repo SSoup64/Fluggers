@@ -13,7 +13,8 @@ use std::fs;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let code: String = fs::read_to_string("../code.flug")?;
-
+    
+    // Lexer
     let lexer = Lexer::new(&code);
     let tokens = lexer.into_tokens().unwrap_or_else(|errs| {
         for err in errs {
@@ -21,12 +22,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         process::exit(1)
     });
-
-    println!("Successfully parsed");
-
-    for token in tokens {
-        println!("{:?}", token);
-    }
+    
+    // Parser
+    let parser = Parser::from_tokens(tokens);
+    let _ast = parser.into_ast();
 
     Ok(())
 }
