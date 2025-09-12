@@ -12,7 +12,32 @@ impl<'input> Parser<'input> {
         Self { tokens }
     }
 
-    pub fn into_ast(self) -> Result<Box<dyn ast::ast_node::AstNode>, ()> {
+    pub fn into_ast(mut self) -> Result<Box<dyn ast::ast_node::AstNode>, ()> {
+        let _ = self.parse_expr_list();
         Err(())
+    }
+
+    // Util funcs
+    fn cur_token(&self) -> Option<&Token<'input>> {
+        self.tokens.front()
+    }
+
+    fn peek(&self, index: usize) -> Option<&Token<'input>> {
+        self.tokens.get(index)
+    }
+
+    fn consume(&mut self) -> Option<Token<'input>> {
+        self.tokens.pop_front()
+    }
+
+    // Parsing funcs
+    fn parse_expr_list(&mut self) {
+        loop {
+            // TODO: Parse expr
+
+            if !matches!(self.cur_token(), Some(Token::Seminolon)) {
+                break;
+            }
+        }
     }
 }
