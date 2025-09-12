@@ -47,4 +47,3 @@ pub enum Token<'input> {
 
     Seminolon,
 }
-

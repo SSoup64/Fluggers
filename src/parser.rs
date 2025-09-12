@@ -9,9 +9,7 @@ pub struct Parser<'input> {
 
 impl<'input> Parser<'input> {
     pub fn from_tokens(tokens: VecDeque<Token<'input>>) -> Self {
-        Self {
-            tokens
-        }
+        Self { tokens }
     }
 
     pub fn into_ast(self) -> Result<Box<dyn ast::ast_node::AstNode>, ()> {

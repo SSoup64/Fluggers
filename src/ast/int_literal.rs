@@ -9,7 +9,5 @@ impl IntLiteral {
 }
 
 impl AstNode for IntLiteral {
-    fn evaluate(&mut self) {
-        
-    }
+    fn evaluate(&mut self) {}
 }

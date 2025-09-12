@@ -1,5 +1,5 @@
-use std::fmt;
 use std::collections::VecDeque;
+use std::fmt;
 
 use phf::phf_map;
 
@@ -85,9 +85,7 @@ impl<'input> Lexer<'input> {
         self.input.chars().nth(self.index + 1)
     }
 
-    pub fn into_tokens(
-        mut self,
-    ) -> Result<VecDeque<Token<'input>>, VecDeque<LexError<'input>>> {
+    pub fn into_tokens(mut self) -> Result<VecDeque<Token<'input>>, VecDeque<LexError<'input>>> {
         // TODO: Implement states for lexer so we don't have to reset the stuff
         self.index = 0;
         self.tokens.clear();
