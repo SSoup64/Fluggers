@@ -1,6 +1,7 @@
 pub mod ast;
 pub mod lexer;
 pub mod parser;
+pub mod token;
 
 use crate::lexer::LexError;
 use crate::lexer::Lexer;

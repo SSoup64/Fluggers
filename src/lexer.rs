@@ -2,6 +2,8 @@ use std::fmt;
 
 use phf::phf_map;
 
+use crate::token::Token;
+
 const KEYWORDS: phf::Map<&'static str, Token> = phf_map! {
     "func" => Token::KeywordFunc,
 
@@ -25,56 +27,6 @@ const OPERATORS: phf::Map<char, Token> = phf_map! {
     '*' => Token::Star,
     '/' => Token::Slash,
 };
-
-#[derive(Debug, Clone)]
-pub enum Token<'input> {
-    Identifier(&'input str),
-    IntLiteral(i128),
-    FloatLiteral(f64),
-    StringLiteral(String),
-
-    // Keywords
-    KeywordFunc,
-
-    KeywordLet,
-    KeywordConst,
-
-    KeywordIf,
-    KeywordElif,
-    KeywordElse,
-
-    KeywordWhile,
-
-    KeywordTrue,
-    KeywordFalse,
-
-    // Symbols
-    Greater,
-    Lesser,
-
-    IsEq,
-
-    GreaterEq,
-    LesserEq,
-
-    SymbolArrow,
-
-    AssignEq,
-
-    Plus,
-    Minus,
-
-    Star,
-    Slash,
-
-    ParenOpen,
-    ParenClose,
-
-    ParenCurlyOpen,
-    ParenCurlyClose,
-
-    Seminolon,
-}
 
 #[derive(Debug)]
 pub enum LexErrorType {
