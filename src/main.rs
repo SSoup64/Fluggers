@@ -16,12 +16,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     
     // Lexer
     let lexer = Lexer::new(&code);
-    let tokens = lexer.into_tokens().unwrap_or_else(|errs| {
+    let tokens = lexer.into_tokens().map_err(|errs| {
         for err in errs {
-            println!("{}", err);
+            eprintln!("{}", err);
         }
-        process::exit(1)
-    });
+        "Failed at lexing"
+    })?;
     
     // Parser
     let parser = Parser::from_tokens(tokens);
