@@ -4,8 +4,9 @@ pub mod parser;
 pub mod token;
 
 use crate::lexer::Lexer;
-
 use crate::parser::Parser;
+
+use std::process;
 
 use std::error::Error;
 use std::fs;
@@ -14,19 +15,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     let code: String = fs::read_to_string("../code.flug")?;
 
     let lexer = Lexer::new(&code);
-    let lexer_result = lexer.into_tokens();
+    let tokens = lexer.into_tokens().unwrap_or_else(|errs| {
+        for err in errs {
+            println!("{}", err);
+        }
+        process::exit(1)
+    });
 
-    match lexer_result {
-        Ok(tokens) => {
-            for token in tokens {
-                println!("{:?}", token);
-            }
-        }
-        Err(errs) => {
-            for err in errs {
-                println!("{}", err);
-            }
-        }
+    println!("Successfully parsed");
+
+    for token in tokens {
+        println!("{:?}", token);
     }
 
     Ok(())
