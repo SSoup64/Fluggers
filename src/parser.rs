@@ -34,8 +34,10 @@ impl<'input> Parser<'input> {
     fn parse_expr_list(&mut self) {
         loop {
             // TODO: Parse expr
-
-            if !matches!(self.cur_token(), Some(Token::Seminolon)) {
+            
+            if let Some(Token::Seminolon) = self.cur_token() {
+                let _ = self.consume();
+            } else {
                 break;
             }
         }
