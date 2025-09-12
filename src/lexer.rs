@@ -1,4 +1,5 @@
 use std::fmt;
+use std::collections::VecDeque;
 
 use phf::phf_map;
 
@@ -62,8 +63,8 @@ impl fmt::Display for LexError<'_> {
 pub struct Lexer<'input> {
     input: &'input String,
     index: usize,
-    tokens: Vec<Token<'input>>,
-    errs: Vec<LexError<'input>>,
+    tokens: VecDeque<Token<'input>>,
+    errs: VecDeque<LexError<'input>>,
 }
 
 impl<'input> Lexer<'input> {
@@ -71,8 +72,8 @@ impl<'input> Lexer<'input> {
         Self {
             input,
             index: 0,
-            tokens: Vec::<Token>::new(),
-            errs: Vec::<LexError>::new(),
+            tokens: VecDeque::<Token>::new(),
+            errs: VecDeque::<LexError>::new(),
         }
     }
 
@@ -86,7 +87,7 @@ impl<'input> Lexer<'input> {
 
     pub fn into_tokens(
         mut self,
-    ) -> Result<Vec<Token<'input>>, Vec<LexError<'input>>> {
+    ) -> Result<VecDeque<Token<'input>>, VecDeque<LexError<'input>>> {
         // TODO: Implement states for lexer so we don't have to reset the stuff
         self.index = 0;
         self.tokens.clear();
@@ -109,7 +110,7 @@ impl<'input> Lexer<'input> {
                 '+' | '-' | '*' | '/' => {
                     if let Some(operator) = OPERATORS.get(&ch) {
                         // TODO: Check if next char is =
-                        self.tokens.push(operator.clone());
+                        self.tokens.push_back(operator.clone());
                     } else {
                         unreachable!();
                     }
@@ -117,49 +118,49 @@ impl<'input> Lexer<'input> {
 
                 '<' => {
                     if let Some('=') = self.get_next_char() {
-                        self.tokens.push(Token::LesserEq);
+                        self.tokens.push_back(Token::LesserEq);
                     } else {
-                        self.tokens.push(Token::Lesser);
+                        self.tokens.push_back(Token::Lesser);
                     }
                 }
 
                 '>' => {
                     if let Some('=') = self.get_next_char() {
-                        self.tokens.push(Token::GreaterEq);
+                        self.tokens.push_back(Token::GreaterEq);
                     } else {
-                        self.tokens.push(Token::Greater);
+                        self.tokens.push_back(Token::Greater);
                     }
                 }
 
                 '=' => {
                     if let Some('=') = self.get_next_char() {
-                        self.tokens.push(Token::IsEq);
+                        self.tokens.push_back(Token::IsEq);
                         self.index += 1; // For the second =
                     } else {
-                        self.tokens.push(Token::AssignEq);
+                        self.tokens.push_back(Token::AssignEq);
                     }
                 }
 
                 '(' => {
-                    self.tokens.push(Token::ParenOpen);
+                    self.tokens.push_back(Token::ParenOpen);
                 }
                 ')' => {
-                    self.tokens.push(Token::ParenClose);
+                    self.tokens.push_back(Token::ParenClose);
                 }
 
                 '{' => {
-                    self.tokens.push(Token::ParenCurlyOpen);
+                    self.tokens.push_back(Token::ParenCurlyOpen);
                 }
                 '}' => {
-                    self.tokens.push(Token::ParenCurlyClose);
+                    self.tokens.push_back(Token::ParenCurlyClose);
                 }
 
                 ';' => {
-                    self.tokens.push(Token::Seminolon);
+                    self.tokens.push_back(Token::Seminolon);
                 }
 
                 _ => {
-                    self.errs.push(LexError::new(
+                    self.errs.push_back(LexError::new(
                         self.input,
                         LexErrorType::UnknownCharacter(self.index),
                     ));
@@ -193,9 +194,9 @@ impl<'input> Lexer<'input> {
         let identifier = &self.input[start..self.index];
 
         if let Some(keyword) = KEYWORDS.get(identifier) {
-            self.tokens.push(keyword.clone());
+            self.tokens.push_back(keyword.clone());
         } else {
-            self.tokens.push(Token::Identifier(identifier));
+            self.tokens.push_back(Token::Identifier(identifier));
         }
     }
 
@@ -228,7 +229,7 @@ impl<'input> Lexer<'input> {
         if found_dot {
             match number_str.parse::<f64>() {
                 Ok(number) => {
-                    self.tokens.push(Token::FloatLiteral(number));
+                    self.tokens.push_back(Token::FloatLiteral(number));
                 }
                 Err(_) => {
                     unreachable!();
@@ -237,7 +238,7 @@ impl<'input> Lexer<'input> {
         } else {
             match number_str.parse::<i128>() {
                 Ok(number) => {
-                    self.tokens.push(Token::IntLiteral(number));
+                    self.tokens.push_back(Token::IntLiteral(number));
                 }
                 Err(_) => {
                     unreachable!();
