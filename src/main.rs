@@ -2,6 +2,7 @@ pub mod ast;
 pub mod lexer;
 pub mod parser;
 pub mod token;
+pub mod binding_power;
 
 use crate::lexer::Lexer;
 use crate::parser::Parser;
@@ -23,7 +24,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Parser
     let parser = Parser::from_tokens(tokens);
-    let _ast = parser.into_ast();
+    let ast = parser.into_ast();
+
+    println!("{:?}", ast);
 
     Ok(())
 }
