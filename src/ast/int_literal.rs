@@ -3,7 +3,7 @@ use super::ast_node::AstNode;
 pub struct IntLiteral(i128);
 
 impl IntLiteral {
-    fn new(value: i128) -> Self {
+    pub fn new(value: i128) -> Self {
         Self(value)
     }
 }
