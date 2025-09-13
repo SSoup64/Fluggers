@@ -1,5 +1,6 @@
 use super::ast_node::AstNode;
 
+#[derive(Debug)]
 pub struct IntLiteral(i128);
 
 impl IntLiteral {
