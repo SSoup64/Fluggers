@@ -1,3 +1,3 @@
 pub trait AstNode {
-    fn evaluate(&mut self);
+    fn evaluate(&self);
 }
