@@ -1,6 +1,6 @@
 use crate::ast::{self, ast_node::AstNode};
-use crate::token::Token;
 use crate::binding_power::BindingPower;
+use crate::token::Token;
 
 use std::collections::VecDeque;
 
@@ -48,10 +48,10 @@ impl<'input> Parser<'input> {
                 break;
             }
         }
-        
+
         ast::ExprList::new(stmts, tail)
     }
-    
+
     // TODO: Find a way to have parse_expr private
     pub fn parse_expr(&mut self, min_bp: BindingPower) -> Box<dyn AstNode + 'input> {
         let cur_token = self.consume().unwrap();
@@ -72,20 +72,14 @@ impl<'input> Parser<'input> {
 
             // Next token
             let bp = next_token.get_binding_power().unwrap();
-            let led_handler = self.consume().unwrap().into_led_handler().expect("Expected LED handler");
+            let led_handler = self
+                .consume()
+                .unwrap()
+                .into_led_handler()
+                .expect("Expected LED handler");
             left_hand_side = led_handler(self, left_hand_side, bp);
         }
-        
+
         left_hand_side
     }
 }
-
-
-
-
-
-
-
-
-
-

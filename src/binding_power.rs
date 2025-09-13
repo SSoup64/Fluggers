@@ -1,4 +1,3 @@
-
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd)]
 pub enum BindingPower {
     Min,
@@ -6,4 +5,3 @@ pub enum BindingPower {
     Multiplicative,
     Group,
 }
-

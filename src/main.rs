@@ -1,8 +1,8 @@
 pub mod ast;
+pub mod binding_power;
 pub mod lexer;
 pub mod parser;
 pub mod token;
-pub mod binding_power;
 
 use crate::lexer::Lexer;
 use crate::parser::Parser;
