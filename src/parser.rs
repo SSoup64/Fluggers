@@ -1,4 +1,6 @@
-use crate::ast;
+use crate::ast::{self, IntLiteral};
+use crate::ast::ast_node::AstNode;
+
 use crate::token::Token;
 
 use std::collections::VecDeque;
@@ -31,15 +33,37 @@ impl<'input> Parser<'input> {
     }
 
     // Parsing funcs
-    fn parse_expr_list(&mut self) {
+    fn parse_expr_list(&mut self) -> ast::ExprList {
+        let mut stmts: Vec<Box<dyn AstNode>> = vec![];
+        let tail: Box<dyn AstNode>;
+
         loop {
-            // TODO: Parse expr
+            let expr = self.parse_expr();
             
             if let Some(Token::Seminolon) = self.cur_token() {
+                stmts.push(expr);
                 let _ = self.consume();
             } else {
+                tail = expr;
                 break;
             }
         }
+
+        ast::ExprList::new(stmts, tail)
+    }
+
+    fn parse_expr(&mut self) -> Box<dyn AstNode> {
+        // Placeholder implementation
+        Box::new(ast::IntLiteral::new(1))
     }
 }
+
+
+
+
+
+
+
+
+
+
