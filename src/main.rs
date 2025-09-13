@@ -6,8 +6,6 @@ pub mod token;
 use crate::lexer::Lexer;
 use crate::parser::Parser;
 
-use std::process;
-
 use std::error::Error;
 use std::fs;
 
