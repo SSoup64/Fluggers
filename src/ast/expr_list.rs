@@ -1,17 +1,18 @@
 use super::ast_node::AstNode;
 
-pub struct ExprList {
-    stmts: Vec<Box<dyn AstNode>>,
-    tail: Box<dyn AstNode>,
+#[derive(Debug)]
+pub struct ExprList<'input> {
+    stmts: Vec<Box<dyn AstNode + 'input>>,
+    tail: Box<dyn AstNode + 'input>,
 }
 
-impl ExprList {
-    pub fn new(stmts: Vec<Box<dyn AstNode>>, tail: Box<dyn AstNode>) -> Self {
+impl<'input> ExprList<'input> {
+    pub fn new(stmts: Vec<Box<dyn AstNode + 'input>>, tail: Box<dyn AstNode + 'input>) -> Self {
         Self { stmts, tail }
     }
 }
 
-impl AstNode for ExprList {
+impl<'input> AstNode for ExprList<'input> {
     fn evaluate(&self) {
         for stmt in &self.stmts {
             let _ = stmt.evaluate();
