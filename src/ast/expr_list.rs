@@ -2,15 +2,12 @@ use super::ast_node::AstNode;
 
 pub struct ExprList {
     stmts: Vec<Box<dyn AstNode>>,
-    tail: Box<dyn AstNode>
+    tail: Box<dyn AstNode>,
 }
 
 impl ExprList {
     pub fn new(stmts: Vec<Box<dyn AstNode>>, tail: Box<dyn AstNode>) -> Self {
-        Self {
-            stmts,
-            tail
-        }
+        Self { stmts, tail }
     }
 }
 

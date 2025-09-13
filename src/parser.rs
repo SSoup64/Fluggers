@@ -1,5 +1,4 @@
-use crate::ast::{self, IntLiteral};
-use crate::ast::ast_node::AstNode;
+use crate::ast::{self, ast_node::AstNode};
 
 use crate::token::Token;
 
@@ -39,7 +38,7 @@ impl<'input> Parser<'input> {
 
         loop {
             let expr = self.parse_expr();
-            
+
             if let Some(Token::Seminolon) = self.cur_token() {
                 stmts.push(expr);
                 let _ = self.consume();
@@ -57,13 +56,3 @@ impl<'input> Parser<'input> {
         Box::new(ast::IntLiteral::new(1))
     }
 }
-
-
-
-
-
-
-
-
-
-
