@@ -66,17 +66,21 @@ impl<'input> Parser<'input> {
                 break;
             };
 
-            if next_token.get_binding_power().unwrap() < min_bp {
+            let Some(bp) = next_token.get_binding_power() else {
+                break;
+            };
+
+            if bp < min_bp {
                 break;
             }
 
             // Next token
-            let bp = next_token.get_binding_power().unwrap();
             let led_handler = self
                 .consume()
                 .unwrap()
                 .into_led_handler()
                 .expect("Expected LED handler");
+
             left_hand_side = led_handler(self, left_hand_side, bp);
         }
 
