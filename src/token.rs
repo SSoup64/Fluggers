@@ -66,19 +66,17 @@ impl<'input> Token<'input> {
         self,
     ) -> Option<
         Box<
-            dyn FnOnce(
-                    &mut Parser<'input>,
-                    ast::Node<'input>,
-                    BindingPower,
-                ) -> ast::Node<'input>
+            dyn FnOnce(&mut Parser<'input>, ast::Node<'input>, BindingPower) -> ast::Node<'input>
                 + 'input,
         >,
     > {
         match self {
-            op @ (Token::Plus | Token::Minus | Token::Star | Token::Slash) => Some(Box::new(move |parser, left, bp| {
-                let right = parser.parse_expr(bp);
-                ast::Node::BinOp(ast::BinOp::boxed(left, right, op))
-            })),
+            op @ (Token::Plus | Token::Minus | Token::Star | Token::Slash) => {
+                Some(Box::new(move |parser, left, bp| {
+                    let right = parser.parse_expr(bp);
+                    ast::Node::BinOp(ast::BinOp::boxed(left, right, op))
+                }))
+            }
             _ => None,
         }
     }

@@ -9,11 +9,7 @@ pub struct BinOp<'input> {
 }
 
 impl<'input> BinOp<'input> {
-    pub fn boxed(
-        left: Node<'input>,
-        right: Node<'input>,
-        op: Token<'input>,
-    ) -> Box<Self> {
+    pub fn boxed(left: Node<'input>, right: Node<'input>, op: Token<'input>) -> Box<Self> {
         Box::new(Self { left, right, op })
     }
 
