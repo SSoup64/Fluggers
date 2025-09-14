@@ -75,12 +75,10 @@ impl<'input> Token<'input> {
         >,
     > {
         match self {
-            op @ (Token::Plus | Token::Minus | Token::Star | Token::Slash) => {
-                Some(Box::new(move |parser, left, bp| {
-                    let right = parser.parse_expr(bp);
-                    Box::new(BinOp::new(left, right, op))
-                }))
-            }
+            op @ (Token::Plus | Token::Minus | Token::Star | Token::Slash) => Some(Box::new(move |parser, left, bp| {
+                let right = parser.parse_expr(bp);
+                Box::new(BinOp::new(left, right, op))
+            })),
             _ => None,
         }
     }

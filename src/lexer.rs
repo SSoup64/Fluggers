@@ -184,6 +184,7 @@ impl<'input> Lexer<'input> {
                     self.index += 1;
                 }
                 _ => {
+                    self.index -= 1;
                     break;
                 }
             }
@@ -217,12 +218,13 @@ impl<'input> Lexer<'input> {
                     }
                 }
                 _ => {
+                    self.index -= 1;
                     break;
                 }
             }
         }
 
-        let number_str = &self.input[start..self.index];
+        let number_str = &self.input[start..=self.index];
 
         if found_dot {
             match number_str.parse::<f64>() {
