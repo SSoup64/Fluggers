@@ -1,4 +1,4 @@
-use crate::ast::{self, ast_node::AstNode};
+use crate::ast;
 use crate::binding_power::BindingPower;
 use crate::token::Token;
 
@@ -15,8 +15,8 @@ impl<'input> Parser<'input> {
         Self { tokens }
     }
 
-    pub fn into_ast(mut self) -> Result<Box<dyn ast::ast_node::AstNode + 'input>, ()> {
-        Ok(Box::new(self.parse_expr_list()))
+    pub fn into_ast(mut self) -> Result<ast::Node<'input>, ()> {
+        Ok(self.parse_expr_list())
     }
 
     // Util funcs
@@ -33,9 +33,9 @@ impl<'input> Parser<'input> {
     }
 
     // Parsing funcs
-    fn parse_expr_list(&mut self) -> ast::ExprList<'input> {
-        let mut stmts: Vec<Box<dyn AstNode>> = vec![];
-        let tail: Box<dyn AstNode>;
+    fn parse_expr_list(&mut self) -> ast::Node<'input> {
+        let mut stmts: Vec<ast::Node> = vec![];
+        let tail: ast::Node;
 
         loop {
             let expr = self.parse_expr(BindingPower::Min);
@@ -49,16 +49,16 @@ impl<'input> Parser<'input> {
             }
         }
 
-        ast::ExprList::new(stmts, tail)
+        ast::Node::ExprList(ast::ExprList::boxed(stmts, tail))
     }
 
     // TODO: Find a way to have parse_expr private
-    pub fn parse_expr(&mut self, min_bp: BindingPower) -> Box<dyn AstNode + 'input> {
+    pub fn parse_expr(&mut self, min_bp: BindingPower) -> ast::Node<'input> {
         let cur_token = self.consume().unwrap();
 
         // Parse the NUD
         let nud_handler = cur_token.into_nud_handler().expect("Expected NUD handler");
-        let mut left_hand_side: Box<dyn AstNode> = nud_handler(self);
+        let mut left_hand_side: ast::Node = nud_handler(self);
 
         loop {
             // Check if we should stop the loop

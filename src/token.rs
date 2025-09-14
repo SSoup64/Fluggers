@@ -1,4 +1,4 @@
-use crate::ast::{ast_node::AstNode, *};
+use crate::ast;
 use crate::binding_power::BindingPower;
 use crate::parser::Parser;
 
@@ -68,25 +68,25 @@ impl<'input> Token<'input> {
         Box<
             dyn FnOnce(
                     &mut Parser<'input>,
-                    Box<dyn AstNode + 'input>,
+                    ast::Node<'input>,
                     BindingPower,
-                ) -> Box<dyn AstNode + 'input>
+                ) -> ast::Node<'input>
                 + 'input,
         >,
     > {
         match self {
             op @ (Token::Plus | Token::Minus | Token::Star | Token::Slash) => Some(Box::new(move |parser, left, bp| {
                 let right = parser.parse_expr(bp);
-                Box::new(BinOp::new(left, right, op))
+                ast::Node::BinOp(ast::BinOp::boxed(left, right, op))
             })),
             _ => None,
         }
     }
 
-    pub fn into_nud_handler(self) -> Option<Box<dyn FnOnce(&mut Parser) -> Box<dyn AstNode>>> {
+    pub fn into_nud_handler(self) -> Option<Box<dyn FnOnce(&mut Parser) -> ast::Node<'input>>> {
         match self {
             Token::IntLiteral(val) => Some(Box::new(move |_: &mut Parser| {
-                Box::new(IntLiteral::new(val))
+                ast::Node::IntLiteral(ast::IntLiteral::boxed(val))
             })),
             _ => None,
         }

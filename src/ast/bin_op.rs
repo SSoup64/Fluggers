@@ -1,25 +1,23 @@
-use super::ast_node::AstNode;
+use super::node::Node;
 use crate::token::Token;
 
 #[derive(Debug)]
 pub struct BinOp<'input> {
-    left: Box<dyn AstNode + 'input>,
-    right: Box<dyn AstNode + 'input>,
+    left: Node<'input>,
+    right: Node<'input>,
     op: Token<'input>,
 }
 
 impl<'input> BinOp<'input> {
-    pub fn new(
-        left: Box<dyn AstNode + 'input>,
-        right: Box<dyn AstNode + 'input>,
+    pub fn boxed(
+        left: Node<'input>,
+        right: Node<'input>,
         op: Token<'input>,
-    ) -> Self {
-        Self { left, right, op }
+    ) -> Box<Self> {
+        Box::new(Self { left, right, op })
     }
-}
 
-impl<'input> AstNode for BinOp<'input> {
-    fn evaluate(&self) {
+    pub fn evaluate(&self) {
         // TODO:
         // Implement
     }
