@@ -117,6 +117,7 @@ impl<'input> Lexer<'input> {
                 '<' => {
                     if let Some('=') = self.get_next_char() {
                         self.tokens.push_back(Token::LesserEq);
+                        self.index += 1;
                     } else {
                         self.tokens.push_back(Token::Lesser);
                     }
@@ -125,6 +126,7 @@ impl<'input> Lexer<'input> {
                 '>' => {
                     if let Some('=') = self.get_next_char() {
                         self.tokens.push_back(Token::GreaterEq);
+                        self.index += 1;
                     } else {
                         self.tokens.push_back(Token::Greater);
                     }
@@ -154,7 +156,7 @@ impl<'input> Lexer<'input> {
                 }
 
                 ';' => {
-                    self.tokens.push_back(Token::Seminolon);
+                    self.tokens.push_back(Token::Semicolon);
                 }
 
                 _ => {
@@ -184,13 +186,14 @@ impl<'input> Lexer<'input> {
                     self.index += 1;
                 }
                 _ => {
-                    self.index -= 1;
                     break;
                 }
             }
         }
+        
+        self.index -= 1;
 
-        let identifier = &self.input[start..self.index];
+        let identifier = &self.input[start..=self.index];
 
         if let Some(keyword) = KEYWORDS.get(identifier) {
             self.tokens.push_back(keyword.clone());
@@ -218,11 +221,12 @@ impl<'input> Lexer<'input> {
                     }
                 }
                 _ => {
-                    self.index -= 1;
                     break;
                 }
             }
         }
+        
+        self.index -= 1;
 
         let number_str = &self.input[start..=self.index];
 
