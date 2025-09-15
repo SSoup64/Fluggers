@@ -4,8 +4,6 @@ use crate::token::Token;
 
 use std::collections::VecDeque;
 
-use phf::phf_map;
-
 pub struct Parser<'input> {
     tokens: VecDeque<Token<'input>>,
 }
@@ -40,7 +38,7 @@ impl<'input> Parser<'input> {
         loop {
             let expr = self.parse_expr(BindingPower::Min);
 
-            if let Some(Token::Seminolon) = self.cur_token() {
+            if let Some(Token::Semicolon) = self.cur_token() {
                 stmts.push(expr);
                 let _ = self.consume();
             } else {

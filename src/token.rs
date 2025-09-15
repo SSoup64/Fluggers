@@ -2,7 +2,7 @@ use crate::ast;
 use crate::binding_power::BindingPower;
 use crate::parser::Parser;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Token<'input> {
     Identifier(&'input str),
     IntLiteral(i128),
@@ -49,7 +49,7 @@ pub enum Token<'input> {
     ParenCurlyOpen,
     ParenCurlyClose,
 
-    Seminolon,
+    Semicolon,
 }
 
 impl<'input> Token<'input> {

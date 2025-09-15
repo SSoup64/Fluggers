@@ -3,6 +3,7 @@ pub mod binding_power;
 pub mod lexer;
 pub mod parser;
 pub mod token;
+pub mod tests;
 
 use crate::lexer::Lexer;
 use crate::parser::Parser;
@@ -30,3 +31,4 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+
