@@ -33,11 +33,11 @@ impl<'input> Parser<'input> {
         self.tokens.get(index)
     }
 
-    fn consume(&mut self) -> Option<Token<'input>> {
+    pub fn consume(&mut self) -> Option<Token<'input>> {
         self.tokens.pop_front()
     }
 
-    fn expect_token(&mut self, expected: Token) -> bool {
+    pub fn expect_token(&mut self, expected: Token) -> bool {
         match self.consume() {
             Some(token) => token == expected,
             None => false,

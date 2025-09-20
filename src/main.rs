@@ -26,7 +26,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let parser = Parser::from_tokens(tokens);
     let ast = parser.into_ast();
 
-    println!("{:?}", ast);
+    println!("{:#?}", ast);
 
     Ok(())
 }

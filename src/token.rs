@@ -67,10 +67,21 @@ impl<'input> Token<'input> {
         }
     }
 
-    pub fn into_nud_handler(self) -> Option<Box<dyn FnOnce(&mut Parser) -> ast::Node<'input>>> {
+    pub fn into_nud_handler(self) -> Option<Box<dyn FnOnce(&mut Parser<'input>) -> ast::Node<'input>>> {
         match self {
             Token::IntLiteral(val) => Some(Box::new(move |_: &mut Parser| {
                 ast::Node::IntLiteral(ast::IntLiteral::boxed(val))
+            })),
+            Token::Keyword("let") => Some(Box::new(|parser: &mut Parser| {
+                let Some(Token::Identifier(name)) = parser.consume() else {
+                    panic!("Expected identifier");
+                };
+                
+                _ = parser.expect_token(Token::AssignEq);
+
+                let expr = parser.parse_expr(BindingPower::Min);
+
+                ast::Node::VarDecl(ast::VarDecl::boxed(name, expr))
             })),
             _ => None,
         }
