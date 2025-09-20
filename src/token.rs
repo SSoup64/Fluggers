@@ -7,21 +7,8 @@ pub enum Token<'input> {
     IntLiteral(i128),
     FloatLiteral(f64),
     StringLiteral(String),
-
-    // Keywords
-    KeywordFunc,
-
-    KeywordLet,
-    KeywordConst,
-
-    KeywordIf,
-    KeywordElif,
-    KeywordElse,
-
-    KeywordWhile,
-
-    KeywordTrue,
-    KeywordFalse,
+    
+    Keyword(&'input str),
 
     // Symbols
     Greater,

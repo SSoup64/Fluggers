@@ -1,24 +1,24 @@
 use std::collections::VecDeque;
 use std::fmt;
 
-use phf::phf_map;
+use phf::{ phf_set, phf_map };
 
 use crate::token::Token;
 
-const KEYWORDS: phf::Map<&'static str, Token> = phf_map! {
-    "func" => Token::KeywordFunc,
+const KEYWORDS: phf::Set<&'static str> = phf_set! {
+    "func",
 
-    "let" => Token::KeywordLet,
-    "const" => Token::KeywordConst,
+    "let",
+    "const",
 
-    "if" => Token::KeywordIf,
-    "elif" => Token::KeywordElif,
-    "else" => Token::KeywordElse,
+    "if",
+    "elif",
+    "else",
 
-    "while" => Token::KeywordWhile,
+    "while",
 
-    "true" => Token::KeywordTrue,
-    "false" => Token::KeywordFalse,
+    "true",
+    "false",
 };
 
 // In order to make stuff like += easier to implement down the line
@@ -195,8 +195,8 @@ impl<'input> Lexer<'input> {
 
         let identifier = &self.input[start..=self.index];
 
-        if let Some(keyword) = KEYWORDS.get(identifier) {
-            self.tokens.push_back(keyword.clone());
+        if KEYWORDS.contains(identifier) {
+            self.tokens.push_back(Token::Keyword(identifier));
         } else {
             self.tokens.push_back(Token::Identifier(identifier));
         }
