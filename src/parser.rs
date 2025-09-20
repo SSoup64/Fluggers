@@ -1,8 +1,15 @@
 use crate::ast;
-use crate::binding_power::BindingPower;
 use crate::token::Token;
 
 use std::collections::VecDeque;
+
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd)]
+pub enum BindingPower {
+    Min,
+    Additive,
+    Multiplicative,
+    Group,
+}
 
 pub struct Parser<'input> {
     tokens: VecDeque<Token<'input>>,
@@ -28,6 +35,13 @@ impl<'input> Parser<'input> {
 
     fn consume(&mut self) -> Option<Token<'input>> {
         self.tokens.pop_front()
+    }
+
+    fn expect_token(&mut self, expected: Token) -> bool {
+        match self.consume() {
+            Some(token) => token == expected,
+            None => false,
+        }
     }
 
     // Parsing funcs

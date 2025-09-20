@@ -1,6 +1,5 @@
 use crate::ast;
-use crate::binding_power::BindingPower;
-use crate::parser::Parser;
+use crate::parser::{ Parser, BindingPower };
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Token<'input> {
