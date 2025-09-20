@@ -83,6 +83,21 @@ impl<'input> Token<'input> {
 
                 ast::Node::VarDecl(ast::VarDecl::boxed(name, expr))
             })),
+            Token::Keyword("func") => Some(Box::new(|parser: &mut Parser| {
+                // Parse the parameters
+                parser.expect_token(Token::ParenOpen);
+                // TODO: Implement parameters
+                parser.expect_token(Token::ParenClose);
+                
+                // Parse the body of the function
+                parser.expect_token(Token::ParenCurlyOpen);
+                let ast::Node::ExprList(exprs) = parser.parse_expr_list() else {
+                    unreachable!();
+                };
+                parser.expect_token(Token::ParenCurlyClose);
+                
+                ast::Node::Func(ast::Func::boxed(*exprs))
+            })),
             _ => None,
         }
     }

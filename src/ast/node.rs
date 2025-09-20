@@ -4,6 +4,7 @@ use super::bin_op::BinOp;
 use super::expr_list::ExprList;
 use super::int_literal::IntLiteral;
 use super::var_decl::VarDecl;
+use super::func::Func;
 
 // Node enum
 pub enum Node<'input> {
@@ -11,6 +12,7 @@ pub enum Node<'input> {
     ExprList(Box<ExprList<'input>>),
     IntLiteral(Box<IntLiteral>),
     VarDecl(Box<VarDecl<'input>>),
+    Func(Box<Func<'input>>)
 }
 
 impl<'input> Node<'input> {
@@ -20,6 +22,7 @@ impl<'input> Node<'input> {
             Node::ExprList(expr_list) => expr_list.evaluate(),
             Node::IntLiteral(int_literal) => int_literal.evaluate(),
             Node::VarDecl(var_decl) => var_decl.evaluate(),
+            Node::Func(func) => func.evaluate(),
         }
     }
 }
@@ -31,6 +34,7 @@ impl<'input> fmt::Debug for Node<'input> {
             Node::ExprList(expr_list) => expr_list.fmt(f),
             Node::IntLiteral(int_literal) => int_literal.fmt(f),
             Node::VarDecl(var_decl) => var_decl.fmt(f),
+            Node::Func(func) => func.fmt(f),
         }
     }
 }

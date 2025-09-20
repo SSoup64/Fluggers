@@ -45,7 +45,7 @@ impl<'input> Parser<'input> {
     }
 
     // Parsing funcs
-    fn parse_expr_list(&mut self) -> ast::Node<'input> {
+    pub fn parse_expr_list(&mut self) -> ast::Node<'input> {
         let mut stmts: Vec<ast::Node> = vec![];
         let tail: ast::Node;
 

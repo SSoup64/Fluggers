@@ -2,6 +2,7 @@ pub mod bin_op;
 pub mod expr_list;
 pub mod int_literal;
 pub mod var_decl;
+pub mod func;
 
 pub mod node;
 
@@ -12,3 +13,4 @@ pub use bin_op::BinOp;
 pub use expr_list::ExprList;
 pub use int_literal::IntLiteral;
 pub use var_decl::VarDecl;
+pub use func::Func;
