@@ -1,4 +1,4 @@
 let main = func() {
 	let a = 10;
-	5
+	a
 }

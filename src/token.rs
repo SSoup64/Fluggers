@@ -67,10 +67,20 @@ impl<'input> Token<'input> {
         }
     }
 
-    pub fn into_nud_handler(self) -> Option<Box<dyn FnOnce(&mut Parser<'input>) -> ast::Node<'input>>> {
+    pub fn into_nud_handler(self) -> Option<Box<dyn FnOnce(&mut Parser<'input>) -> ast::Node<'input> + 'input>> {
         match self {
             Token::IntLiteral(val) => Some(Box::new(move |_: &mut Parser| {
                 ast::Node::IntLiteral(ast::IntLiteral::boxed(val))
+            })),
+            Token::Identifier(identifier) => Some(Box::new(move |parser: &mut Parser| {
+                match parser.cur_token() {
+                    Some(Token::ParenOpen) => {
+                        todo!("Implement function calls");
+                    },
+                    _ => {
+                        ast::Node::NameLiteral(ast::NameLiteral::boxed(identifier))
+                    }
+                }
             })),
             Token::Keyword("let") => Some(Box::new(|parser: &mut Parser| {
                 let Some(Token::Identifier(name)) = parser.consume() else {

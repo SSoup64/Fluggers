@@ -25,11 +25,11 @@ impl<'input> Parser<'input> {
     }
 
     // Util funcs
-    fn cur_token(&self) -> Option<&Token<'input>> {
+    pub fn cur_token(&self) -> Option<&Token<'input>> {
         self.tokens.front()
     }
 
-    fn peek(&self, index: usize) -> Option<&Token<'input>> {
+    pub fn peek(&self, index: usize) -> Option<&Token<'input>> {
         self.tokens.get(index)
     }
 
