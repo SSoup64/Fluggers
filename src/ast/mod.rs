@@ -3,7 +3,8 @@ pub mod name_literal;
 pub mod bin_op;
 pub mod expr_list;
 pub mod var_decl;
-pub mod func;
+pub mod func_decl;
+pub mod func_call;
 
 pub mod node;
 
@@ -15,4 +16,5 @@ pub use name_literal::NameLiteral;
 pub use bin_op::BinOp;
 pub use expr_list::ExprList;
 pub use var_decl::VarDecl;
-pub use func::Func;
+pub use func_decl::FuncDecl;
+pub use func_call::FuncCall;

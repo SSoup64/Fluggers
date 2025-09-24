@@ -159,6 +159,10 @@ impl<'input> Lexer<'input> {
                     self.tokens.push_back(Token::Semicolon);
                 }
 
+                ',' => {
+                    self.tokens.push_back(Token::Comma);
+                }
+
                 _ => {
                     self.errs.push_back(LexError::new(
                         self.input,

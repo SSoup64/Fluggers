@@ -36,6 +36,8 @@ pub enum Token<'input> {
     ParenCurlyClose,
 
     Semicolon,
+
+    Comma,
 }
 
 impl<'input> Token<'input> {
@@ -75,7 +77,30 @@ impl<'input> Token<'input> {
             Token::Identifier(identifier) => Some(Box::new(move |parser: &mut Parser| {
                 match parser.cur_token() {
                     Some(Token::ParenOpen) => {
-                        todo!("Implement function calls");
+                        let _ = parser.consume();
+
+                        // Parse the arguments
+                        let mut args = vec![];
+
+                        while *parser.cur_token().expect("Got EOF while parsing a function call") != Token::ParenClose {
+                            // Parse argument
+                            args.push(parser.parse_expr(BindingPower::Min));
+
+                            // Check if we should parse another argument
+                            match *parser.cur_token().expect("Got EOF while parsing a function call") {
+                                Token::Comma => {
+                                    let _ = parser.consume();
+                                    continue;
+                                },
+                                Token::ParenClose => break,
+                                _ => { panic!("Unexpected token while parsing a function call") }
+                            }
+                        }
+                        
+                        // Parse the ParenClose token
+                        let _ = parser.consume();
+
+                        ast::Node::FuncCall(ast::FuncCall::boxed(identifier, args))
                     },
                     _ => {
                         ast::Node::NameLiteral(ast::NameLiteral::boxed(identifier))
@@ -106,7 +131,7 @@ impl<'input> Token<'input> {
                 };
                 parser.expect_token(Token::ParenCurlyClose);
                 
-                ast::Node::Func(ast::Func::boxed(*exprs))
+                ast::Node::FuncDecl(ast::FuncDecl::boxed(*exprs))
             })),
             _ => None,
         }

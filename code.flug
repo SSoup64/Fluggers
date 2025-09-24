@@ -1,4 +1,13 @@
-let main = func() {
-	let a = 10;
-	a
-}
+let add = func() {
+	let a;
+	let b;
+	a + b
+};
+
+let zero = func() {
+	0
+};
+
+add(1, 2);
+add(1, 2,);
+zero()

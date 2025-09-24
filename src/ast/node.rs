@@ -5,7 +5,8 @@ use super::name_literal::NameLiteral;
 use super::bin_op::BinOp;
 use super::expr_list::ExprList;
 use super::var_decl::VarDecl;
-use super::func::Func;
+use super::func_decl::FuncDecl;
+use super::func_call::FuncCall;
 
 // Node enum
 pub enum Node<'input> {
@@ -14,7 +15,8 @@ pub enum Node<'input> {
     BinOp(Box<BinOp<'input>>),
     ExprList(Box<ExprList<'input>>),
     VarDecl(Box<VarDecl<'input>>),
-    Func(Box<Func<'input>>)
+    FuncDecl(Box<FuncDecl<'input>>),
+    FuncCall(Box<FuncCall<'input>>),
 }
 
 impl<'input> Node<'input> {
@@ -25,7 +27,8 @@ impl<'input> Node<'input> {
             Node::BinOp(bin_op) => bin_op.evaluate(),
             Node::ExprList(expr_list) => expr_list.evaluate(),
             Node::VarDecl(var_decl) => var_decl.evaluate(),
-            Node::Func(func) => func.evaluate(),
+            Node::FuncDecl(func_decl) => func_decl.evaluate(),
+            Node::FuncCall(func_call) => func_call.evaluate(),
         }
     }
 }
@@ -38,7 +41,8 @@ impl<'input> fmt::Debug for Node<'input> {
             Node::BinOp(bin_op) => bin_op.fmt(f),
             Node::ExprList(expr_list) => expr_list.fmt(f),
             Node::VarDecl(var_decl) => var_decl.fmt(f),
-            Node::Func(func) => func.fmt(f),
+            Node::FuncDecl(func_decl) => func_decl.fmt(f),
+            Node::FuncCall(func_call) => func_call.fmt(f),
         }
     }
 }
