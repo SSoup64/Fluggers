@@ -1,8 +1,8 @@
-let add = func(a, b) {
+let add = func(a, b) => {
 	a + b
 };
 
-let zero = func() {
+let zero = func() => {
 	0
 };
 

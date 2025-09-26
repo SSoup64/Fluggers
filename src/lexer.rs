@@ -133,11 +133,18 @@ impl<'input> Lexer<'input> {
                 }
 
                 '=' => {
-                    if let Some('=') = self.get_next_char() {
-                        self.tokens.push_back(Token::IsEq);
-                        self.index += 1; // For the second =
-                    } else {
-                        self.tokens.push_back(Token::AssignEq);
+                    match self.get_next_char() {
+                        Some('=') => {
+                            self.tokens.push_back(Token::IsEq);
+                            self.index += 1; // For the second =
+                        },
+                        Some('>') => {
+                            self.tokens.push_back(Token::FatArrow);
+                            self.index += 1; // For the >
+                        },
+                        _ => { 
+                            self.tokens.push_back(Token::AssignEq);
+                        }
                     }
                 }
 

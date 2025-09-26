@@ -19,7 +19,7 @@ pub enum Token<'input> {
     GreaterEq,
     LesserEq,
 
-    SymbolArrow,
+    FatArrow,
 
     AssignEq,
 
@@ -144,6 +144,7 @@ impl<'input> Token<'input> {
                 }
 
                 parser.expect_token(Token::ParenClose);
+                parser.expect_token(Token::FatArrow);
                 
                 // Parse the body of the function
                 parser.expect_token(Token::ParenCurlyOpen);
