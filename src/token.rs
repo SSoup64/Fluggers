@@ -74,6 +74,7 @@ impl<'input> Token<'input> {
             Token::IntLiteral(val) => Some(Box::new(move |_: &mut Parser| {
                 ast::Node::IntLiteral(ast::IntLiteral::boxed(val))
             })),
+            
             Token::Identifier(identifier) => Some(Box::new(move |parser: &mut Parser| {
                 match parser.cur_token() {
                     Some(Token::ParenOpen) => {
@@ -107,6 +108,7 @@ impl<'input> Token<'input> {
                     }
                 }
             })),
+
             Token::Keyword("let") => Some(Box::new(|parser: &mut Parser| {
                 let Some(Token::Identifier(name)) = parser.consume() else {
                     panic!("Expected identifier");
@@ -118,10 +120,29 @@ impl<'input> Token<'input> {
 
                 ast::Node::VarDecl(ast::VarDecl::boxed(name, expr))
             })),
+
             Token::Keyword("func") => Some(Box::new(|parser: &mut Parser| {
                 // Parse the parameters
                 parser.expect_token(Token::ParenOpen);
-                // TODO: Implement parameters
+
+                // Parse the parameters
+                let mut params: Vec<&str> = vec![];
+
+                while *parser.cur_token().expect("Got EOF while parsing a function call") != Token::ParenClose {
+                    // Parse argument
+                    params.push(parser.expect_identifier().expect("Parameters must be identifiers"));
+
+                    // Check if we should parse another argument
+                    match *parser.cur_token().expect("Got EOF while parsing a function declaration") {
+                        Token::Comma => {
+                            let _ = parser.consume();
+                            continue;
+                        },
+                        Token::ParenClose => break,
+                        _ => { panic!("Unexpected token while parsing a function declaration") }
+                    }
+                }
+
                 parser.expect_token(Token::ParenClose);
                 
                 // Parse the body of the function
@@ -131,8 +152,9 @@ impl<'input> Token<'input> {
                 };
                 parser.expect_token(Token::ParenCurlyClose);
                 
-                ast::Node::FuncDecl(ast::FuncDecl::boxed(*exprs))
+                ast::Node::FuncDecl(ast::FuncDecl::boxed(params, *exprs))
             })),
+
             _ => None,
         }
     }

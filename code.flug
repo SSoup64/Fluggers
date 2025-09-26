@@ -1,6 +1,4 @@
-let add = func() {
-	let a;
-	let b;
+let add = func(a, b) {
 	a + b
 };
 
@@ -8,6 +6,4 @@ let zero = func() {
 	0
 };
 
-add(1, 2);
-add(1, 2,);
-zero()
+add(1, 2)

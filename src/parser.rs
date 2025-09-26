@@ -44,6 +44,13 @@ impl<'input> Parser<'input> {
         }
     }
 
+    pub fn expect_identifier(&mut self) -> Option<&'input str> {
+        match self.consume() {
+            Some(Token::Identifier(identifier)) => Some(identifier),
+            _ => None,
+        }
+    }
+
     // Parsing funcs
     pub fn parse_expr_list(&mut self) -> ast::Node<'input> {
         let mut stmts: Vec<ast::Node> = vec![];
