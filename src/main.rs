@@ -11,7 +11,7 @@ use std::error::Error;
 use std::fs;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let code: String = fs::read_to_string("../code.flug")?;
+    let code: String = fs::read_to_string(format!("{}/code.flug", env!("CARGO_MANIFEST_DIR")))?;
 
     // Lexer
     let lexer = Lexer::new(&code);
