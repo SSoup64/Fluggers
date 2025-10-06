@@ -1,5 +1,6 @@
 use super::node::Node;
 use crate::token::Token;
+use crate::gc::value::Value;
 
 #[derive(Debug)]
 pub struct BinOp<'input> {
@@ -13,8 +14,7 @@ impl<'input> BinOp<'input> {
         Box::new(Self { left, right, op })
     }
 
-    pub fn evaluate(&self) {
-        // TODO:
-        // Implement
+    pub fn evaluate(&self) -> Value {
+        todo!() // All the type checks.
     }
 }

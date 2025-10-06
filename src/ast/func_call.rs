@@ -1,4 +1,5 @@
 use super::node::Node;
+use crate::gc::value::Value;
 
 #[derive(Debug)]
 pub struct FuncCall<'input> {
@@ -11,5 +12,7 @@ impl<'input> FuncCall<'input> {
         Box::new(Self { func_name, args })
     }
 
-    pub fn evaluate(&self) {}
+    pub fn evaluate(&self) -> Value {
+        todo!();
+    }
 }

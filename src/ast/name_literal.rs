@@ -1,4 +1,5 @@
 use std::fmt;
+use crate::gc::value::Value;
 
 pub struct NameLiteral<'input> {
     name: &'input str,
@@ -9,7 +10,9 @@ impl<'input> NameLiteral<'input> {
         Box::new(Self { name })
     }
 
-    pub fn evaluate(&self) {}
+    pub fn evaluate(&self) -> Value {
+        todo!()
+    }
 }
 
 impl<'input> fmt::Debug for NameLiteral<'input> {

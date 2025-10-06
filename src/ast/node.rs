@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::gc::value::Value;
+
 use super::int_literal::IntLiteral;
 use super::name_literal::NameLiteral;
 use super::bin_op::BinOp;
@@ -20,7 +22,7 @@ pub enum Node<'input> {
 }
 
 impl<'input> Node<'input> {
-    pub fn evaluate(&self) {
+    pub fn evaluate(&self) -> Value {
         match self {
             Node::IntLiteral(int_literal) => int_literal.evaluate(),
             Node::NameLiteral(name_literal) => name_literal.evaluate(),

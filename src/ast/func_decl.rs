@@ -1,4 +1,5 @@
 use super::expr_list::ExprList;
+use crate::gc::value::Value;
 
 #[derive(Debug)]
 pub struct FuncDecl<'input> {
@@ -11,6 +12,8 @@ impl<'input> FuncDecl<'input> {
         Box::new(Self { params, exprs })
     }
 
-    pub fn evaluate(&self) {}
+    pub fn evaluate(&self) -> Value {
+        Value::Func(self)
+    }
 }
 

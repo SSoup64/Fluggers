@@ -1,4 +1,5 @@
 use super::node::Node;
+use crate::gc::value::Value;
 
 #[derive(Debug)]
 pub struct VarDecl<'input> {
@@ -11,7 +12,7 @@ impl<'input> VarDecl<'input> {
         Box::new(Self { name, expr })
     }
 
-    pub fn evaluate(&self) {
-
+    pub fn evaluate(&self) -> Value {
+        todo!()
     }
 }
